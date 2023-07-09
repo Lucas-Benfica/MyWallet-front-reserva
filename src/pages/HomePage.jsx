@@ -1,37 +1,59 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { useEffect, useState } from "react"
+import api from "../services/api";
+import useAuth from "../hooks/useAuth.js"
+import dayjs from "dayjs";
 
 export default function HomePage() {
+  const [user, setUser] = useState();
+  const [list, setList] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  const {auth} = useAuth();
+
+  useEffect(() => {
+    const promise = api.getHistory(auth);
+    promise.then(res => {
+      setUser(res.data.name);
+      setList(res.data.list);
+      setTotal(calcTotal(res.data.list));
+    });
+    promise.catch(err => {
+      alert(err.response.data);
+    })
+  }, []);
+
+  function calcTotal(ls){
+    let soma = 0;
+    for(let i=0; i < ls.length; i++){
+      if(ls[i].type == "entrada"){
+        soma += Number(ls[i].value);
+      }
+      else{
+        soma -= Number(ls[i].value);
+      }
+    }
+    return soma;
+  }
+  
+  
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
+        <h1>Olá, {user}</h1>
         <BiExit />
       </Header>
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          {list.map(transaction => <Transaction key={transaction._id} transaction = {transaction} />)}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value color={(total >= 0)?"positivo":"negativo"}>{(total >= 0)? total : (total * (-1))}</Value>
         </article>
       </TransactionsContainer>
 
@@ -49,6 +71,21 @@ export default function HomePage() {
 
     </HomeContainer>
   )
+}
+
+function Transaction({transaction}){
+  const {date, description, type, value} = transaction;
+  const day = dayjs(date).format("DD/MM");
+  const value2 = Number(value).toFixed(2)
+  return (
+    <ListItemContainer>
+            <div>
+              <span>{day}</span>
+              <strong>{description}</strong>
+            </div>
+            <Value color={(type == "entrada") ? "positivo" : "negativo"}>{value2}</Value>
+    </ListItemContainer>
+  );
 }
 
 const HomeContainer = styled.div`
