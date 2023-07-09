@@ -2,7 +2,8 @@ import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
 import MyWalletLogo from "../components/MyWalletLogo"
 import { useEffect, useState } from "react"
-import api from "../services/api"
+import api from "../services/api.js"
+import useAuth from "../hooks/useAuth.js"
 
 export default function SignInPage() {
   //Variével de estado que vai controlar as informações dos inputs
@@ -30,13 +31,13 @@ export default function SignInPage() {
     const promise = api.login({...formLogin});
     promise.then( res => {
       setIsLoading(false);
-      login(response.data);
+      login(res.data);
       navigate("/home");
     });
     promise.catch( err => {
       setIsLoading(false);
       console.log(err);
-      //alert('Erro, tente novamente');
+      alert(err.response.data);
     });
 }
 
@@ -56,7 +57,6 @@ export default function SignInPage() {
         <input 
           placeholder="Senha"
           type="password"
-          autocomplete="new-password" 
           name="password"
           onChange={setLogin}
           value={formLogin.password}
@@ -68,7 +68,7 @@ export default function SignInPage() {
         </button>
       </form>
 
-      <Link >
+      <Link to="/cadastro" >
         Primeira vez? Cadastre-se!
       </Link>
     </SingInContainer>

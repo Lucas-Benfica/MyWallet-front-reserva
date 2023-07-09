@@ -3,7 +3,8 @@ import { createContext, useState } from "react";
 const AuthContext = createContext();
 
 export function AuthProvider({children}){
-    const persistedAuth = JSON.parce(localStorage.getItem("auth"));
+
+    const persistedAuth = JSON.parse(localStorage.getItem("auth"));
     const [auth, setAuth] = useState(persistedAuth);
 
     function login(authData){
