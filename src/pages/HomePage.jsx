@@ -5,15 +5,19 @@ import { useEffect, useState } from "react"
 import api from "../services/api";
 import useAuth from "../hooks/useAuth.js"
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const [user, setUser] = useState();
   const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate();
 
-  const {auth} = useAuth();
+  const {auth, login} = useAuth();
 
   useEffect(() => {
+    console.log(auth)
+
     const promise = api.getHistory(auth);
     promise.then(res => {
       setUser(res.data.name);
@@ -22,7 +26,7 @@ export default function HomePage() {
     });
     promise.catch(err => {
       alert(err.response.data);
-    })
+    });
   }, []);
 
   function calcTotal(ls){
@@ -38,32 +42,42 @@ export default function HomePage() {
     return soma;
   }
   
+  function exit(){
+    const promise = api.logout(auth);
+    promise.then(res => {
+      login("exit");
+      navigate("/");
+    });
+    promise.catch(err => {
+      alert(err.response.data);
+    })
+  }
   
   return (
     <HomeContainer>
       <Header>
         <h1>Olá, {user}</h1>
-        <BiExit />
+        <BiExit onClick={exit}/>
       </Header>
 
       <TransactionsContainer>
-        <ul>
+        <StyledUL>
           {list.map(transaction => <Transaction key={transaction._id} transaction = {transaction} />)}
-        </ul>
+        </StyledUL>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={(total >= 0)?"positivo":"negativo"}>{(total >= 0)? total : (total * (-1))}</Value>
+          <Value color={(total >= 0)?"positivo":"negativo"}>{(total >= 0)? total.toFixed(2) : (total * (-1)).toFixed(2)}</Value>
         </article>
       </TransactionsContainer>
 
 
       <ButtonsContainer>
-        <button>
+        <button onClick={() => navigate("/nova-transacao/entrada")}>
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button>
+        <button onClick={() => navigate("/nova-transacao/saida")}>
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>
@@ -155,4 +169,8 @@ const ListItemContainer = styled.li`
     color: #c6c6c6;
     margin-right: 10px;
   }
+`
+const StyledUL = styled.ul`
+  overflow: auto;
+  height: 446px;
 `

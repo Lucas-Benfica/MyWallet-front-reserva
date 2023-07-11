@@ -1,4 +1,5 @@
 import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 const URL = import.meta.env.VITE_API_URL;
 
@@ -28,11 +29,18 @@ function createTransaction(type, body, token){
     return promise;
 }
 
+function logout(token){
+    const config = createConfig(token);
+    const promise = axios.get(`${URL}/logout`, config);
+    return promise;
+}
+
 const api = {
     login,
     singUp,
     getHistory,
-    createTransaction
+    createTransaction,
+    logout
 };
 
 export default api;

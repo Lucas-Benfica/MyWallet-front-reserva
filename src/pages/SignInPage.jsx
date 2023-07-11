@@ -13,14 +13,16 @@ export default function SignInPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(auth && auth.token){
+    if(auth && auth != "exit"){
       navigate("/home");
+    }else{
+      localStorage.clear();
     }
   }, []);
 
   //Função para ir salvando as mudanças
   function setLogin(e){
-    setFormLogin({...formLogin, [e.target.name]: e.target.value})
+    setFormLogin({...formLogin, [e.target.name]: e.target.value});
   }
 
   function submitLogin(e){
@@ -36,7 +38,6 @@ export default function SignInPage() {
     });
     promise.catch( err => {
       setIsLoading(false);
-      console.log(err);
       alert(err.response.data);
     });
 }
