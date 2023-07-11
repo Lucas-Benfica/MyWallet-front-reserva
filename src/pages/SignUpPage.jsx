@@ -46,7 +46,7 @@ export default function SignUpPage() {
     <SingUpContainer>
       <form onSubmit={submitCadastro}>
         <MyWalletLogo />
-        <input 
+        <input data-test="name"
           placeholder="Nome" 
           type="text"
           name="name"
@@ -55,7 +55,7 @@ export default function SignUpPage() {
           disabled={isLoading}
           required
         />
-        <input
+        <input data-test="email"
           type="email"
           placeholder="E-mail"
           name="email"
@@ -64,7 +64,7 @@ export default function SignUpPage() {
           disabled={isLoading}
           required
         />
-        <input 
+        <input data-test="password"
           placeholder="Senha"
           type="password"
           name="password"
@@ -73,7 +73,7 @@ export default function SignUpPage() {
           disabled={isLoading}
           required  
         />
-        <input 
+        <input data-test="conf-password"
           placeholder="Confirme a senha"
           type="password"
           name="confirmPass"
@@ -82,7 +82,7 @@ export default function SignUpPage() {
           disabled={isLoading}
           required  
         />
-        <button type="submit" disabled={isLoading}>Cadastrar</button>
+        <button data-test="sign-up-submit" type="submit" disabled={isLoading}>Cadastrar</button>
       </form>
 
       <Link to="/">

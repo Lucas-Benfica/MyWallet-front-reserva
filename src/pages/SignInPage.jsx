@@ -46,7 +46,7 @@ export default function SignInPage() {
     <SingInContainer>
       <form onSubmit={submitLogin}>
         <MyWalletLogo />
-        <input
+        <input  data-test="email"
           type="email"
           placeholder="E-mail"
           name="email"
@@ -55,7 +55,7 @@ export default function SignInPage() {
           disabled={isLoading}
           required
         />
-        <input 
+        <input  data-test="password"
           placeholder="Senha"
           type="password"
           name="password"
@@ -64,7 +64,7 @@ export default function SignInPage() {
           disabled={isLoading}
           required  
         />
-        <button type="submit" disabled={isLoading}>
+        <button data-test="sign-in-submit" type="submit" disabled={isLoading}>
           Entrar
         </button>
       </form>

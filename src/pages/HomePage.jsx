@@ -54,8 +54,8 @@ export default function HomePage() {
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, {user}</h1>
-        <BiExit onClick={exit}/>
+        <h1 data-test="user-name" >Olá, {user}</h1>
+        <BiExit onClick={exit} data-test="logout"/>
       </Header>
 
       <TransactionsContainer>
@@ -65,17 +65,21 @@ export default function HomePage() {
 
         <article>
           <strong>Saldo</strong>
-          <Value color={(total >= 0)?"positivo":"negativo"}>{(total >= 0)? total.toFixed(2) : (total * (-1)).toFixed(2)}</Value>
+          <Value color={(total >= 0)?"positivo":"negativo"}  data-test="total-amount">
+            {(total >= 0) 
+              ? total.toFixed(2).toString().replace(".", ",")
+              : ((total * (-1)).toFixed(2)).toString().replace(".", ",")}
+          </Value>
         </article>
       </TransactionsContainer>
 
 
       <ButtonsContainer>
-        <button onClick={() => navigate("/nova-transacao/entrada")}>
+        <button onClick={() => navigate("/nova-transacao/entrada")} data-test="new-income" >
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button onClick={() => navigate("/nova-transacao/saida")}>
+        <button onClick={() => navigate("/nova-transacao/saida")} data-test="new-expense" >
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>
@@ -88,14 +92,15 @@ export default function HomePage() {
 function Transaction({transaction}){
   const {date, description, type, value} = transaction;
   const day = dayjs(date).format("DD/MM");
-  const value2 = Number(value).toFixed(2)
+  const value2 = Number(value).toFixed(2);
+  let value3 = value2.toString().replace(".", ",");
   return (
     <ListItemContainer>
             <div>
               <span>{day}</span>
-              <strong>{description}</strong>
+              <strong  data-test="registry-name" >{description}</strong>
             </div>
-            <Value color={(type == "entrada") ? "positivo" : "negativo"}>{value2}</Value>
+            <Value  data-test="registry-amount" color={(type == "entrada") ? "positivo" : "negativo"}>{value3}</Value>
     </ListItemContainer>
   );
 }

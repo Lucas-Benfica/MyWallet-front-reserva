@@ -46,9 +46,9 @@ export default function TransactionsPage() {
 
   return (
     <TransactionsContainer>
-      <h1>Nova TRANSAÇÃO</h1>
+      <h1>Nova {tipo}</h1>
       <form onSubmit={submitTransfer}>
-        <input 
+        <input data-test="registry-amount-input"
           placeholder="Valor" 
           type="text"
           name="value"
@@ -57,7 +57,7 @@ export default function TransactionsPage() {
           disabled={isLoading}
           required
         />
-        <input 
+        <input data-test="registry-name-input"
           placeholder="Descrição" 
           type="text"
           name="description"
@@ -66,7 +66,7 @@ export default function TransactionsPage() {
           disabled={isLoading}
           required
         />
-        <button type="submit" disabled={isLoading}>Salvar TRANSAÇÃO</button>
+        <button type="submit" disabled={isLoading} data-test="registry-save">Salvar {tipo}</button>
       </form>
     </TransactionsContainer>
   )
