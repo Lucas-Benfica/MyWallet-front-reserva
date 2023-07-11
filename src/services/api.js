@@ -30,6 +30,8 @@ function createTransaction(type, body, token){
 }
 
 function logout(token){
+    localStorage.removeItem("auth");
+
     const config = createConfig(token);
     const promise = axios.get(`${URL}/logout`, config);
     return promise;

@@ -15,9 +15,10 @@ export default function SignInPage() {
   useEffect(() => {
     if(auth && auth != "exit"){
       navigate("/home");
-    }else{
-      localStorage.clear();
     }
+    /*else{
+      localStorage.clear();
+    }*/
   }, []);
 
   //Função para ir salvando as mudanças
