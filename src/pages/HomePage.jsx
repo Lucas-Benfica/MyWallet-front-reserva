@@ -16,8 +16,6 @@ export default function HomePage() {
   const {auth, login} = useAuth();
 
   useEffect(() => {
-    console.log(auth)
-
     const promise = api.getHistory(auth);
     promise.then(res => {
       setUser(res.data.name);
